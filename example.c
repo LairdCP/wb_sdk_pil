@@ -28,7 +28,7 @@ SDCERR LRD_WF_PIL_Deinit()
 }
 
 static REG_DOMAIN myStoredRd = REG_WW;
-SDCERR LRD_WF_PIL_GetRegDomain( unsigned long * regDomain )
+SDCERR LRD_WF_PIL_GetRegDomain( REG_DOMAIN * regDomain )
 {
 	if(regDomain==NULL)
 		return SDCERR_INVALID_PARAMETER;
@@ -36,7 +36,7 @@ SDCERR LRD_WF_PIL_GetRegDomain( unsigned long * regDomain )
 	return SDCERR_SUCCESS;
 }
 
-SDCERR LRD_WF_PIL_SetRegDomain( unsigned long regDomain )
+SDCERR LRD_WF_PIL_SetRegDomain( REG_DOMAIN regDomain )
 {
 	myStoredRd = regDomain;
 	return SDCERR_SUCCESS;
