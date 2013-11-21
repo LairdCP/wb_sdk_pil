@@ -1,1 +1,32 @@
-This project is a simple example of a PIL library
+This project is a simple example of a Platform Independent Library (PIL).
+
+The library is supported by the header file lrd_sdk_pil.h which should be 
+part of the SDK header files.
+
+2013-11-04
+
+The initial version of the PIL library allows the user to replace the 
+functions for geting/seting the regdomain which is stored in the uboot
+environment on the WB45 project.
+
+Example - 
+
+The example.c file contains an example of an extremely simplified PIL.
+The user is expected to populate the LRD_WF_PilInfo structure with 
+their company's relevant data.
+
+All functions in the PIL are optional.  A user only needs to populate the 
+functionality desired.
+
+The PIL allows the user to supply unique serial numbers and product IDs
+to their products.  A new function: LRD_WF_GetPilInfo() has been added
+to sdc_sdk.h, and allows the user to retrieve the LRD_WF_PilInfo struct.
+
+Any library initialization can be done in the library initialization 
+routine: LRD_WF_PIL_Init() and similarly, a destructor routine is 
+available with LRD_WF_PIL_Deinit()
+
+In the example.c file, you can see we are storing the REG_DOMAIN value in 
+a local static variable.  This is only for example as the user will likely
+want to store this value in a persistent file on their device.
+
