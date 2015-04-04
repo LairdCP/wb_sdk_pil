@@ -16,6 +16,8 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "sdc_sdk.h"
 #include "lrd_sdk_pil.h"
 
@@ -44,19 +46,67 @@ SDCERR LRD_WF_PIL_Deinit()
 	return SDCERR_SUCCESS;
 }
 
-static REG_DOMAIN myStoredRd = REG_WW;
+//
+// This example shows a possible method of storing and retrieving the 
+// regulatory domain value.  The intent is to allow you to access a storage
+// area that is not modifiable by the end user, and is also persistent
+// in case you erase the file system, for example, with a system upgrade.
+// Although the example uses a file on the file-system, other options 
+// include an eeprom, uboot environment, or an area unique to your device.
+
+#define Domain_File "/etc/summit/domain.txt"
+
 SDCERR LRD_WF_PIL_GetRegDomain( REG_DOMAIN * regDomain )
 {
+	FILE *f;
+	char key[256], set=0;
+	int value;
+
 	if(regDomain==NULL)
 		return SDCERR_INVALID_PARAMETER;
-	*regDomain = myStoredRd;
-	return SDCERR_SUCCESS;
+
+	f = fopen(Domain_File, "r");
+	if (f == NULL)
+	{
+		//TODO: debug log something like: perror("fopen for read");
+		return SDCERR_FAIL;
+	}
+
+	while(!feof(f))
+	{
+		if (fscanf(f,"%s %d", key, &value) !=2)
+		{
+			break;
+		}
+		if (strcmp( key, "domain")==0)
+		{
+			*regDomain = (REG_DOMAIN) value;
+			set = 1;
+			break;
+		}
+	}
+
+	fclose(f);
+
+	if (set)
+		return SDCERR_SUCCESS;
+	return SDCERR_FAIL;
 }
 
 SDCERR LRD_WF_PIL_SetRegDomain( REG_DOMAIN regDomain )
 {
-	myStoredRd = regDomain;
+	FILE *f;
+
+	f=fopen(Domain_File, "w");
+
+	if (f == NULL)
+	{
+		//TODO: debug log something like: perror("fopen for write");
+		return SDCERR_FAIL;
+	}
+	fprintf(f, "domain %d\n", regDomain);
+
+	fclose(f);
+
 	return SDCERR_SUCCESS;
 }
-
-
