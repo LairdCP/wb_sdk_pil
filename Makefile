@@ -31,7 +31,7 @@ all: $(LIB)
 
 $(LIB): $(_OBJS)
 	$(CC) -shared -Wl,-soname,$(LIB).so.1 \
-	-o $(LIB).so.1.0 $(_OBJS) -lc $(LIBS)
+	-o $(LIB).so.1.0 $(_OBJS) -lc
 	ln -fs $(LIB).so.1.0 $(LIB).so.1
 
 clean:
