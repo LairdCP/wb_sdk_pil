@@ -14,7 +14,7 @@
 #--------------------------------------------------------------------------
 
 # Allow CROSS_COMPILE to specify compiler base
-CC := arm-sdc-linux-gnueabi-gcc
+CC := arm-laird-linux-gnueabi-gcc
 
 CFLAGS += -c -Wall -I. -fPIC
 
